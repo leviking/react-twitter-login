@@ -29,12 +29,12 @@ export const obtainOauthRequestToken = async ({
   consumerSecret: string;
 }) => {
   const oauthSignature = requestTokenSignature({
-    method,
-    apiUrl,
-    callbackUrl,
-    consumerKey,
-    consumerSecret
-  });
+        method,
+        apiUrl,
+        callbackUrl,
+        consumerKey,
+        consumerSecret
+      });
   const res = await fetch(`${proxyUrl}${apiUrl}`, {
     method,
     headers: {
