@@ -5,8 +5,10 @@ import TwitterLoginButton from "./TwitterLoginButton";
 import { openWindow, observeWindow } from "./services/window";
 import {
   obtainOauthRequestToken,
+  parseOAuthRequestToken,
   obtainOauthAccessToken
 } from "./services/oauth1";
+import { requestTokenSignature } from "./services/signature";
 
 export default class TwitterLoginComponent extends React.Component<
   TwitterLoginProps,
@@ -68,7 +70,7 @@ export default class TwitterLoginComponent extends React.Component<
   };
 
   handleLoginClick = async () => {
-    const { consumerKey, consumerSecret, callbackUrl } = this.props;
+    const { consumerKey, consumerSecret, callbackUrl, token } = this.props;
     if (callbackUrl) {
       console.warn(
         `DEPRECATED: "callbackUrl" is not supported and ignored from version 1.2.0 and higher. It's hardcoded inside the package with "window.location.href". More details: https://github.com/alexandrtovmach/react-twitter-login/issues/8`
@@ -79,7 +81,8 @@ export default class TwitterLoginComponent extends React.Component<
       callbackUrl: window.location.href,
       consumerKey,
       consumerSecret,
-      method: "POST"
+      method: "POST",
+      token
     };
     const requestTokenData = await obtainOauthRequestToken(
       obtainRequestTokenConfig
