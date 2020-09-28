@@ -16,7 +16,7 @@ const parseOAuthRequestToken = (responseText: string) =>
   }, {} as RequestTokenResponse);
 
 export const obtainOauthRequestToken = async ({
-  signatureGenerator,
+  signature,
   consumerKey,
   consumerSecret,
   callbackUrl,
@@ -28,17 +28,18 @@ export const obtainOauthRequestToken = async ({
   callbackUrl: string;
   consumerKey: string;
   consumerSecret: string;
-  signatureGenerator: any;
+  signature: string;
 }) => {
-  const oauthSignature = signatureGenerator
-    ? signatureGenerator()
-    : requestTokenSignature({
-        method,
-        apiUrl,
-        callbackUrl,
-        consumerKey,
-        consumerSecret
-      });
+  const oauthSignature =
+    signature ||
+    requestTokenSignature({
+      method,
+      apiUrl,
+      callbackUrl,
+      consumerKey,
+      consumerSecret
+    });
+  console.log("oauth signature", oauthSignature);
   const res = await fetch(`${proxyUrl}${apiUrl}`, {
     method,
     headers: {
